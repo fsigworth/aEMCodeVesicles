@@ -1,0 +1,36 @@
+
+% rlLinkCSMicrographs
+cd '~/tomo/sigworth/20240829_prestin/'
+cd micrographs/J3_mics/
+
+d=dir;
+origNames={};
+shortNames={};
+j=0;
+for i=1:numel(d)
+    [shortName,tail]=rlShortenCSName(d(i).name);
+    if strcmp(tail,'patch_aligned_doseweighted.mrc')
+        j=j+1;
+        origNames{j}=d(i).name;
+        shortNames{j}=[shortName '.mrc'];
+        if j<10
+            disp(shortName);
+        end;
+    end;
+end;
+
+
+
+
+
+function [shortName,tail]=rlShortenCSName(baseName)
+    usLast=5;
+    usPtrs=find(baseName=='_');
+    if numel(usPtrs)>=usLast
+        shortName=baseName(usPtrs(1)+1:usPtrs(usLast));
+        tail=baseName(usLast+1:end);
+    else
+        shortName='';
+        tail='';
+    end;
+end

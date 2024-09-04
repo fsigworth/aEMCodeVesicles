@@ -1,0 +1,17 @@
+% rlShowPickerStats.m
+
+% starName='Class2D/job020/run_it012_data.star';
+% [nms,das]=ReadStarFile(starName);
+% 
+
+dat=das{2};
+amps=dat.rlnAutopickFigureOfMerit;
+spects=dat.rspAutopickNoiseVar;
+
+minAmp=min(amps)
+maxAmp=max(amps)
+minSpect=min(spects)
+maxSpect=max(spects)
+
+
+
