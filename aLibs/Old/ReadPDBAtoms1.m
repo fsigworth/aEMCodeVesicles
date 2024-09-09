@@ -1,4 +1,4 @@
-function [coords types]=ReadPDBAtoms2(filename, hetatms, chains)
+function [coords, types]=ReadPDBAtoms(filename, hetatms)
 % function [coords types]=ReadPDBAtoms(filename, hetatms);
 % Fast pdb coordinate reader.  Reads the coordinates of all ATOM records or
 % both ATOM and HETATM records (if hetatms=1, default).  Given na atoms,
@@ -10,18 +10,18 @@ function [coords types]=ReadPDBAtoms2(filename, hetatms, chains)
 if nargin<2
     hetatms=1;
 end;
-
-if nargin<3
-    chains='';
-    allChains=true;
-else
-    allChains=false;
-end;
-
 if hetatms>0
     atomText={'ATOM','HETATM'};
 else
     atomText='ATOM';
+end;
+
+if nargin<1
+    [filename,path]=uigetfile('*.*');
+    if isnumeric(path)
+        return
+    end;
+    cd(path);
 end;
 
 fid = fopen(filename,'r');
@@ -35,40 +35,53 @@ theLines = textscan(fid,'%s','delimiter','\n');
 theLines = theLines{1};  % textscan returns a 1x1 cell containing a cell array.
 fclose(fid);
 
+% %%
+% % Remove the lines corresponding to other models when requested a
+% % particular model
+% if modelNum ~= 0
+%     modelStarts = find(strncmp(theLines,'MODEL ',6));
+%     modelEnds = find(strncmp(theLines,'ENDMDL ',7));
+%     modelMatch = ['^MODEL \s*' num2str(modelNum) '\s'];
+%     h = find(~cellfun(@isempty,regexp(theLines(modelStarts),modelMatch,'once')));
+%     if isempty(h)
+%        warning('Bioinfo:pdbread:NoModelEntry',...
+%                'PDB file does not contain Model %d. Reading the entire file.', modelNum);
+%     else
+%        q = [1:modelStarts(1)-1 modelStarts(h):modelEnds(h) modelEnds(end)+1:numel(theLines)];
+%        theLines = theLines(q);
+%     end
+% end
 nl=numel(theLines);
 
 % Count the number of atom coordinates
 na=0;
-okLines=false(1,nl);
 for i=1:nl
     tline = theLines{i};
     if ischar(tline)
         len = length(tline);
-        if len>54 && any(strcmpi(deblank(tline(1:6)),atomText)) && ...
-                (allChains || numel(strfind(chains,tline(22)))>0)
-            okLines(i)=true;
+        if len>5 && any(strcmpi(deblank(tline(1:6)),atomText))
+            na=na+1;
         end;
     end;
 end;
 
-coords=zeros(3,sum(okLines));
+
+coords=zeros(3,na);
 types=char(zeros(na,4));
 na=0;
-inds=find(okLines);
-for i=inds
-    tline = theLines{i};
-%     len = length(tline0)
+for i=1:nl
+    tline0 = theLines{i};
+    len = length(tline0);
     
     %     % RCSB web site format requires each line to have 80 characters. This
     %     % avoids exceeding the matrix dimension for lines with
     %     % Less than 80 characters.
-%     tline = [tline0 blanks(80-len)];
-%     Record_name = deblank(tline(1:6));
+    tline = [tline0 blanks(80-len)];
+    Record_name = deblank(tline(1:6));
     
-%     switch upper(Record_name)
-%         %
-%         case atomText
-%             if allChains || numel(strfind(chains,chain))>0
+    switch upper(Record_name)
+        %
+        case atomText
             na=na+1;
             s=strtrim(tline(13:16));  % atom type
             sl=length(s);
@@ -76,8 +89,7 @@ for i=inds
             coords(1,na) = sscanf(tline(31:38),'%f');
             coords(2,na) = sscanf(tline(39:46),'%f');
             coords(3,na) = sscanf(tline(47:54),'%f');
-%             end;
-%     end;
+    end;
 end;
 
 % plot3(coords(1,:),coords(2,:),coords(3,:),'k.');
