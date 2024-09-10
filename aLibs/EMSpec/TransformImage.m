@@ -45,8 +45,9 @@ if all(size(theta)==2)  % this parameter is the transf. matrix
 else  % construct the rotation/scale matrix
     ma2=scale(2)/(1+scale(2));
     ma3=scale(3)/(1+scale(3));
-    scalemat=[1 0 ; 0 1]/scale(1)-[1 0; 0 -1]*ma2/sqrt(2)-[0 1; 1 0]*ma3/sqrt(2);
-    rmat=[cos(theta) sin(theta); -sin(theta) cos(theta)]*scalemat;
+    scalemat=[1 0 ; 0 1]*scale(1)+[1 0; 0 -1]*ma2/sqrt(2)+[0 1; 1 0]*ma3/sqrt(2);
+    rmat=inv([cos(theta) -sin(theta); sin(theta) cos(theta)]*scalemat);
+    
 end;
 
 nb=ceil(n/blocksize);
