@@ -11,9 +11,10 @@ jobEnd=inf;
 % workingDir='/gpfs/gibbs/pi/tomography/sigworth/20220920/';
 % workingDir='/gpfs/gibbs/pi/tomography/sigworth/20240116/';
 workingDir='/gpfs/gibbs/pi/sigworth/20240703/'
+workingDir='~/EMWork/'SYP_kO_testmicrograph/';
 
 starName='JoinStar/job017/join_mics.star'
-pathNameSuffix='1'; % we now construct the filenames using this suffix
+pathNameSuffix=''; % we now construct the filenames using this suffix
 
 cd(workingDir)
 [names,dat]=ReadStarFile(starName);

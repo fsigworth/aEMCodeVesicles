@@ -13,9 +13,9 @@ runIndex=1;
 nRuns=1;
 
 doFindVesicles        =1;
-doPrelimInverseFilter =0;
+%doPrelimInverseFilter =0;
 doRefineVesicles      =1;
-doInverseFilter       =0;
+%doInverseFilter       =0;
 doPickingPreprocessor =0;
 doPicking             =0;
 updateAllMis          =0;
@@ -28,13 +28,14 @@ jobEnd=inf;
 
 % Directories must be set up
 %workingDir='/gpfs/gibbs/pi/sigworth/20240703/';
+workingDir='~/EMWork/SYP/'
 cd(workingDir);
 
  infoDir='Info/';
  logDir='Log/';
 
 pars=struct;
-pars.loadFilenames=1; % pick up allNames.mat
+pars.loadFilenames=0; % pick up allNames.mat
 pars.filenameFile=[infoDir 'allNames.mat']; % in the working directory
 
 % for picking preprocessor
@@ -185,17 +186,17 @@ if skipAlreadyDone
 
 end;
 
-    % inverse filter (sequence 6)
-    if doPrelimInverseFilter
-        active=miOk(i) && logSeqs(:,6)==0;
-        activeNames=ourNames(active);
-        disp([num2str(sum(active)) ' mi files for inverse filtero0'])
-        if any(active)
-        fpars=struct;
-        fpars.useUnsubImage=1;
-            meInverseFilterAuto(activeNames,fpars);
-        end;
-    end;
+    % % inverse filter (sequence 6)
+    % if doPrelimInverseFilter
+    %     active=miOk(i) && logSeqs(:,6)==0;
+    %     activeNames=ourNames(active);
+    %     disp([num2str(sum(active)) ' mi files for inverse filtero0'])
+    %     if any(active)
+    %     fpars=struct;
+    %     fpars.useUnsubImage=1;
+    %         meInverseFilterAuto(activeNames,fpars);
+    %     end;
+    % end;
 
     if doFindVesicles
         active= logSeqs(:,4)==0;
@@ -216,16 +217,16 @@ end;
             rsRefineVesicleFitsA(activeNames,rpars);
         end;
     end;
-            % inverse filter (sequence 6)
-    if doInverseFilter 
-        active=logSeqs(:,6)==0;
-        activeNames=ourNames(active);
-        disp([num2str(sum(active)) ' mi files for vesicle finding.'])
-        if any(active)
-            meInverseFilterAuto(activeNames);
-        end;
-    end;
-
+    %         % inverse filter (sequence 6)
+    % if doInverseFilter 
+    %     active=logSeqs(:,6)==0;
+    %     activeNames=ourNames(active);
+    %     disp([num2str(sum(active)) ' mi files for vesicle finding.'])
+    %     if any(active)
+    %         meInverseFilterAuto(activeNames);
+    %     end;
+    % end;
+    % 
 
     % picking preprocessor (sequence 8)
     if doPickingPreprocessor

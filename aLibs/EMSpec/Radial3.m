@@ -1,7 +1,7 @@
 function [means,medians,vals,rVals]=Radial3(w,org)
 % function means = Radial3(w,org)
 % function [means,medians,vals,rVals]=Radial3(w,org);
-% Compute the circularly-averaged, radial component of the cubic volume w,
+% Compute the spherically-averaged, radial component of the cubic volume w,
 % with the origin taken to be org.  The number of points returned is
 % nr=floor(min(size(w))/2).
 % The assignment of radius values used to be ceil(r) but is now round(r). Thus

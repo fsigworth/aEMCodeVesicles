@@ -1,13 +1,16 @@
-f% startup.m
+% startup.m
+% vesicle-fitting version
 % Put this script somewhere where Matlab will look on startup, e.g. in home
 % folder or in ~/Documents/MATLAB
-host='MyHost';
+% It loads the library paths.
+
+host=getenv('HOSTNAME');
 homePath='~/';
 basePath='~/aEMCodeVesicles/'; % We asssume that the code is here.
 
 disp([which('startup') ' on ' host]);
+disp(['  from the library ' basePath]);
 
-setenv('HOSTNAME',host);
 cd(homePath);
 folders={['aLibs' filesep 'EMBase']
          ['aLibs' filesep 'EMCCD']
@@ -15,30 +18,32 @@ folders={['aLibs' filesep 'EMBase']
          ['aLibs' filesep 'EMIOUtils']
          ['aLibs' filesep 'EMSpec']
          ['aLibs' filesep 'GriddingLib']
-         ['aLibs' filesep 'MEX'   ]   
-         ['aLibs' filesep 'Others']
-         'EMClass'
-         'FourierReconstruction'
-         'K2Camera'
          'MultiExposure'
          'Relion'
-         'Realtime'
          'RSC'
          'RSC-Apps'
          'RSC-utilities'
          'RSCPicking'
-         'RSCReconstruct'
-         'RSCSimulate'
          'RSCVesicleFinder'
          'RSCAnalysis'
-         'AMPAR'
-         'Kv'
-%         ['aLibs' filesep 'Others' filesep 'bfmatlab']
-%          'RSCAdaptiveBasis'
-%          'RSCAdaptiveBasis/utils'
-         };
-         
+        };
+
 for i=1:numel(folders)
     addpath([basePath folders{i}]);
 end;
 
+% skipped modules
+         % 'RSCReconstruct'
+         % 'RSCSimulate'
+         % 'Realtime'
+         % 'AMPAR'
+         % 'Kv'
+         % ['aLibs' filesep 'Others']
+         % 'EMClass'
+         % 'FourierReconstruction'
+%         ['aLibs' filesep 'Others' filesep 'bfmatlab']
+%          'RSCAdaptiveBasis'
+%          'RSCAdaptiveBasis/utils'
+%          'K2Camera'
+%         ['aLibs' filesep 'MEX'   ]   
+         
