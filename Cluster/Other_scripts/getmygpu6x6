@@ -1,0 +1,1 @@
+srun --pty -N 1 -p pi_sigworth --mem 160G --cpus-per-task 6 --ntasks 6 --gres=gpu:4 --time=48:00:00 bash

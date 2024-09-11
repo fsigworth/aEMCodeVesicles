@@ -1,0 +1,1 @@
+srun --pty --x11 --mem-per-cpu=6000 --partition=devel -c 1 bash

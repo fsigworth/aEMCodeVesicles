@@ -1,0 +1,3 @@
+# list jobs on my gpu node
+squeue -l -w r103u17n01
+

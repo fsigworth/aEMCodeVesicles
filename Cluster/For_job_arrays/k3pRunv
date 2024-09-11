@@ -1,0 +1,26 @@
+#!/bin/bash
+# script to run one task of a job array, on Scavenge, calling matlab running k3DistributedPipeline.  Execute this way:
+#   sbatch --array=1-8 k3pRunv
+#SBATCH -J k3pRunv
+#SBATCH -c 4
+# SBATCH -C E5-2660_v3
+#SBATCH --mem-per-cpu=4500
+#SBATCH -p scavenge
+#SBATCH -o k%A_%a.out
+#SBATCH -e k%A_%a.err
+#SBATCH --time=24:00:00
+#SBATCH --requeue
+
+echo host $HOSTNAME
+
+module restore
+
+echo localk3p starting matlab jobs.
+	exec=k3DistributedPipeline # default execution script
+echo script = $exec
+export BATCH_ENVIRONMENT=BATCH
+export NUM_JOBS=$SLURM_ARRAY_TASK_MAX
+export JOB_ID=$SLURM_ARRAY_TASK_ID
+echo task $JOB_ID of $NUM_JOBS
+	matlab -r $exec
+echo Job $JOB_ID finished.
